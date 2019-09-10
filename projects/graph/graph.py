@@ -72,6 +72,8 @@ class Graph:
         """
         # Steps to complete traversal
 
+        # Create a set to store the nodes that we have visited
+        visited = set()
         # Create an empty stack using the provided queue
         s = Stack()
         # Add starting_vertex to the stack
@@ -84,11 +86,12 @@ class Graph:
         while s.size() > 0:
             # Dequeue first vertex in the queue
             current = s.pop()
-        # If it hasn't been visited yet, visit it (add it to the set)
+        # If it hasn't been visited yet,
             if current not in visited:
                 print(current)
+                # visit it (add it to the set)
                 visited.add(current)
-        # Add it's neighbors to the queue
+        # Add it's neighbors to the top of the stack
                 for next_vert in self.vertices[current]:
                     s.push(next_vert)
 
