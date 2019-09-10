@@ -109,41 +109,37 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        # Instead of storing nodes like traversal, we store a path to the node
-        # Steps to complete search
-
         # Create an empty set to store the visited nodes
         visited = set()
         # Create an empty queue
         q = Queue()
         # Add a PATH to starting_vertex to the queue
+        # return a [list] containing shortest path
         q.enqueue([starting_vertex])
-        print("Starting BFS")
 
         # While queue is not empty
         while q.size() > 0:
             # Dequeue first PATH in the queue
             path = q.dequeue()
             # Grab the vertex from the end of the path!
-            v = path[-1]
-            # if vertex = target
-            if v == destination_vertex:
-                # return the path
-                return path
-
+            current = path[-1]
             # If the vertex hasn't been visited yet
-            if v not in visited:
-                print(v)
+            if current not in visited:
+                # if vertex = target
+                if current == destination_vertex:
+                    # return the path
+                    return "BFS: " + str(path)
                 # Mark it as visited (add to set)
-                visited.add(v)
+                visited.add(current)
                 # Add a PATH to all of it's neighbors to the back of the queue
-                for neighbor in self.vertices[v]:
+                for neighbor in self.vertices[current]:
                     # copy the path
-                    path_copy = list(path)
+                    new_path = list(path)
                     # append neighbor to back of the copy
-                    path_copy.append(neighbor)
+                    new_path.append(neighbor)
                     # enqueue copy
-                    q.enqueue(path_copy)
+                    q.enqueue(new_path)
+        return "BFS: Value not found"
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -160,32 +156,30 @@ class Graph:
         s = Stack()
         # Add a PATH to starting_vertex to the queue
         s.push([starting_vertex])
-        print("Starting DFS")
 
         # While queue is not empty
         while s.size() > 0:
             # Dequeue first PATH in the queue
             path = s.pop()
             # Grab the vertex from the end of the path!
-            v = path[-1]
-            # if vertex = target
-            if v == destination_vertex:
-                # return the path
-                return path
-
+            current = path[-1]
             # If the vertex hasn't been visited yet
-            if v not in visited:
-                print(v)
-                # Mark it as visited (add to set)
-                visited.add(v)
+            if current not in visited:
+                # if vertex = target
+                if current == destination_vertex:
+                    # return the path
+                    return "DFS: " + str(path)
+                 # Mark it as visited (add to set)
+                visited.add(current)
                 # Add a PATH to all of it's neighbors to the back of the queue
-                for neighbor in self.vertices[v]:
+                for neighbor in self.vertices[current]:
                     # copy the path
                     path_copy = list(path)
                     # append neighbor to back of the copy
                     path_copy.append(neighbor)
                     # enqueue copy
                     s.push(path_copy)
+        return "DFS: Value not found"
 
 
 if __name__ == '__main__':
@@ -255,6 +249,7 @@ if __name__ == '__main__':
         [1, 2, 4, 6]
     '''
     print(graph.bfs(1, 6))
+    print(graph.bfs(1, 42))
 
     '''
     Valid DFS paths:
@@ -262,3 +257,4 @@ if __name__ == '__main__':
         [1, 2, 4, 7, 6]
     '''
     print(graph.dfs(1, 6))
+    print(graph.dfs(1, 43))
