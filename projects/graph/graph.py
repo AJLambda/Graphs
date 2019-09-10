@@ -109,30 +109,41 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
+        # Instead of storing nodes like traversal, we store a path to the node
         # Steps to complete search
 
-        # Create an empty queue using the provided queue
-        q = Queue()
-        # Create a set to store the nodes that we have visited
+        # Create an empty set to store the visited nodes
         visited = set()
-        # Add starting_vertex to the queue
-        q.enqueue(starting_vertex)
-        # Add destination_vertex to the queue
-
+        # Create an empty queue
+        q = Queue()
+        # Add a PATH to starting_vertex to the queue
+        q.enqueue([starting_vertex])
         print("Starting BFS")
 
         # While queue is not empty
-        # Iterate through each level starting at first vert
         while q.size() > 0:
-            # Dequeue first vertex in the queue
-            current = q.dequeue()
-        # If it hasn't been visited yet, visit it (add it to the set)
-            if current not in visited:
-                print(current)
-                visited.add(current)
-        # Add it's neighbors to the queue
-                for next_vert in self.vertices[current]:
-                    q.enqueue(next_vert)
+            # Dequeue first PATH in the queue
+            path = q.dequeue()
+            # Grab the vertex from the end of the path!
+            v = path[-1]
+            # if vertex = target
+            if v == destination_vertex:
+                # return the path
+                return path
+
+            # If the vertex hasn't been visited yet
+            if v not in visited:
+                print(v)
+                # Mark it as visited (add to set)
+                visited.add(v)
+                # Add a PATH to all of it's neighbors to the back of the queue
+                for neighbor in self.vertices[v]:
+                    # copy the path
+                    path_copy = list(path)
+                    # append neighbor to back of the copy
+                    path_copy.append(neighbor)
+                    # enqueue copy
+                    q.enqueue(path_copy)
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -140,30 +151,41 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
+        # Instead of storing nodes like traversal, we store a path to the node
         # Steps to complete search
 
-        # Create an empty stack using the provided queue
-        s = Stack()
-        # Create a set to store the nodes that we have visited
+        # Create an empty set to store the visited nodes
         visited = set()
-        # Add starting_vertex to the stack
-        s.push(starting_vertex)
-        # Add destination_vertex to the stack
-
+        # Create an empty queue
+        s = Stack()
+        # Add a PATH to starting_vertex to the queue
+        s.push([starting_vertex])
         print("Starting DFS")
 
-        # While stack is not empty
-        # Iterate through each level starting at first vert
+        # While queue is not empty
         while s.size() > 0:
-            # Dequeue first vertex in the queue
-            current = s.pop()
-        # If it hasn't been visited yet, visit it (add it to the set)
-            if current not in visited:
-                print(current)
-                visited.add(current)
-        # Add it's neighbors to the queue
-                for next_vert in self.vertices[current]:
-                    s.push(next_vert)
+            # Dequeue first PATH in the queue
+            path = s.pop()
+            # Grab the vertex from the end of the path!
+            v = path[-1]
+            # if vertex = target
+            if v == destination_vertex:
+                # return the path
+                return path
+
+            # If the vertex hasn't been visited yet
+            if v not in visited:
+                print(v)
+                # Mark it as visited (add to set)
+                visited.add(v)
+                # Add a PATH to all of it's neighbors to the back of the queue
+                for neighbor in self.vertices[v]:
+                    # copy the path
+                    path_copy = list(path)
+                    # append neighbor to back of the copy
+                    path_copy.append(neighbor)
+                    # enqueue copy
+                    s.push(path_copy)
 
 
 if __name__ == '__main__':
