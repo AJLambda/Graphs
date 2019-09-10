@@ -14,15 +14,25 @@ class Graph:
         """
         Add a vertex to the graph.
         """
-        self.vertices[vertex] = set()
+        if not vertex in self.vertices:
+            # each vertex needs an identifier that when called upon in the dictionary, has a list of edges.
+            # because we dont want to hold duplicates, we use a set
+            self.vertices[vertex] = set()
+        else:
+            print("Warning: vertex exists")
 
     def add_edge(self, v1, v2):
         """
         Add a directed edge to the graph.
         """
+        # first check if the vertices both exist.
         if v1 and v2 in self.vertices:
+            # if they do, add to the set of vertex one, the reference to vertex two
+            # .add() adds a single parameter, adds one element to the set
+            # this adds v2 to v1's set of edges
             self.vertices[v1].add(v2)
         else:
+            # if they do not both exist
             print("ERROR: Vertex doesn't exist")
 
     def bft(self, starting_vertex):
@@ -32,27 +42,28 @@ class Graph:
         """
         # Steps to complete traversal
 
-        # Create an empty queue using the provided queue
-        q = Queue()
-        # Create a set to store the nodes that we have visited
+        # Create an empty set to store the visited nodes
         visited = set()
+        # Create an empty queue
+        q = Queue()
         # Add starting_vertex to the queue
         q.enqueue(starting_vertex)
 
         print("Starting BFT")
 
         # While queue is not empty
-        # Iterate through each level starting at first vert
         while q.size() > 0:
             # Dequeue first vertex in the queue
             current = q.dequeue()
-        # If it hasn't been visited yet, visit it (add it to the set)
+        # If it hasn't been visited yet
             if current not in visited:
                 print(current)
+                # mark as visited (add to the set)
                 visited.add(current)
-        # Add it's neighbors to the queue
-                for next_vert in self.vertices[current]:
-                    q.enqueue(next_vert)
+        # Add it's neighbors to the back of the queue
+                for neighbor in self.vertices[current]:
+                    # appends the neighbor
+                    q.enqueue(neighbor)
 
     def dft(self, starting_vertex):
         """
@@ -63,8 +74,6 @@ class Graph:
 
         # Create an empty stack using the provided queue
         s = Stack()
-        # Create a set to store the nodes that we have visited
-        visited = set()
         # Add starting_vertex to the stack
         s.push(starting_vertex)
 
@@ -105,6 +114,7 @@ class Graph:
         visited = set()
         # Add starting_vertex to the queue
         q.enqueue(starting_vertex)
+        # Add destination_vertex to the queue
 
         print("Starting BFS")
 
@@ -135,6 +145,7 @@ class Graph:
         visited = set()
         # Add starting_vertex to the stack
         s.push(starting_vertex)
+        # Add destination_vertex to the stack
 
         print("Starting DFS")
 
