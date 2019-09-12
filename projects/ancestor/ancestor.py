@@ -12,13 +12,10 @@ class Graph:
 
     def add_edge(self, v1, v2):
         # Create the vertice if needed.
-        if v1 not in self.vertices:
-            self.add_vertex(v1)
-        if v2 not in self.vertices:
-            self.add_vertex(v2)
-
-        # Now add the edge from v1 to v2
-        self.vertices[v1].add(v2)
+        if v1 in self.vertices and v2 in self.vertices:
+            self.vertices[v1].add(v2)
+        else:
+            print("That vertex does not exist")
 
 
 #  HINTS
@@ -30,49 +27,32 @@ class Graph:
 
 
 def earliest_ancestor(ancestors, starting_node):
+    # Build the graph
     graph = Graph()
-
-    for group in ancestors:
-        print("group: ", group)
-        l = list(group)
-        graph.add_edge(l[1], l[0])
-        print(graph.add_edge(l[1], l[0]))
-
+    for pair in ancestors:
+        graph.add_vertex(pair[0])
+        graph.add_vertex(pair[1])
+        # build edges in reverse(start from bottom of graph)
+        graph.add_edge(pair[1], pair[0])
+    # track the longest path length and the earliest ancestor node
+    max_path_len = 1
+    earliest_ancestor = -1
+    # do a bfs from starting_node to each other node
     q = Queue()
-    path = []
-    highest_nodes = []
-    visited = set()
-
-    q.enqueue(starting_node)
-    highest_nodes.append(starting_node)
-    visited.add(starting_node)
-
-    index = len(highest_nodes)
-    count = len(highest_nodes)
-
-    while True:
-        node = q.dequeue()
-        path.append(node)
-        highest_nodes += list(graph.vertices[node])
-
-        if not q.size() and not graph.vertices[node]:
-            break
-        count -= 1
-
-        if not count:
-            highest_nodes = highest_nodes[index:]
-            count = len(highest_nodes)
-            index = len(highest_nodes)
-
-        for parent in graph.vertices[node]:
-            if parent not in visited:
-                q.enqueue(parent)
-                visited.add(parent)
-                
-    if highest_nodes[0] == starting_node:
-        return -1
-    else:
-        return min(highest_nodes)
+    q.enqueue([starting_node])
+    while q.size() > 0:
+        path = q.dequeue()
+        v = path[-1]
+        # if path is longer or path is same length and node is smaller.
+        if (len(path) >= max_path_len and v < earliest_ancestor) or (len(path) > max_path_len):
+            earliest_ancestor = v
+            max_path_len = len(path)
+        for neighbor in graph.vertices[v]:
+            path_copy = list(path)
+            path_copy.append(neighbor)
+            q.enqueue(path_copy)
+    # return the earliest ancestor
+    return earliest_ancestor
 
 
 if __name__ == '__main__':
@@ -102,6 +82,8 @@ if __name__ == '__main__':
 
 test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7),
                   (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
+
+print(earliest_ancestor(test_ancestors, 1), 10)
 
 # Output:
 # 8 => 4 7 => 4 6 => 1, 2, or 4
